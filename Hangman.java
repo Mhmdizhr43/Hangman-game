@@ -212,3 +212,116 @@ public class Hangman {
             System.out.println("Panjang kata: " + wordToGuess.length() + " huruf");
             System.out.println("Kesempatan salah: " + remainingTries);
             System.out.println("Bantuan tersedia: " + remainingHints);
+            
+            while (remainingTries > 0 && !isWordGuessed(guessedLetters)) {
+                System.out.println("\nKata: " + displayGuessedLetters(guessedLetters));
+                System.out.println("Nyawa: " + "❤".repeat(remainingTries));
+                System.out.println("Bantuan: " + remainingHints + " tersisa");
+                System.out.println("Huruf digunakan: " + usedLetters);
+                
+                System.out.print("Masukkan tebakan (1 huruf atau '?' untuk bantuan): ");
+                String input = scanner.next().toUpperCase();
+                
+                if (input.equals("?")) {
+                    if (remainingHints > 0) {
+                        giveHint(wordToGuess, guessedLetters);
+                        remainingHints--;
+                        System.out.println("Bantuan digunakan! Satu huruf terungkap.");
+                    } else {
+                        System.out.println("Anda sudah menggunakan semua bantuan!");
+                    }
+                    continue;
+                }
+                
+                if (input.length() != 1 || !Character.isLetter(input.charAt(0))) {
+                    System.out.println("Masukkan 1 huruf atau '?' untuk bantuan!");
+                    continue;
+                }
+                
+                char guess = input.charAt(0);
+                
+                if (usedLetters.indexOf(String.valueOf(guess)) != -1) {
+                    System.out.println("Anda sudah menebak huruf '" + guess + "' sebelumnya.");
+                    continue;
+                }
+                
+                usedLetters.append(guess).append(" ");
+                
+                if (wordToGuess.indexOf(guess) != -1) {
+                    System.out.println("Tebakan benar!");
+                    updateGuessedLetters(wordToGuess, guessedLetters, guess);
+                } else {
+                    System.out.println("Tebakan salah! Huruf '" + guess + "' tidak ada dalam kata.");
+                    remainingTries--;
+                    drawHangman(remainingTries);
+                }
+            }
+            
+            if (isWordGuessed(guessedLetters)) {
+                score += remainingTries * 10;
+                correctStreak++;
+
+                if (correctStreak % 3 == 0) {
+                    remainingTries++;
+                    System.out.println("Bonus: Anda mendapat 1 nyawa tambahan karena menang 3 kali berturut-turut!");
+                }
+
+                System.out.println("\n=== SELAMAT " + playerName + "! ANDA MENANG! ===");
+                System.out.println("Jawaban: " + wordToGuess);
+                System.out.println("Skor Anda: " + score);
+            } else {
+                correctStreak = 0;
+                System.out.println("\n=== GAME OVER ===");
+                System.out.println("Jawaban: " + wordToGuess);
+                System.out.println("Skor Anda: " + score);
+            }
+            
+            System.out.print("\nMain lagi? (y/n): ");
+            String choice = scanner.next().toLowerCase();
+            playAgain = choice.equals("y");
+        }
+        
+        System.out.println("\n====================================");
+        System.out.println("  TERIMA KASIH " + playerName + " TELAH BERMAIN!");
+        System.out.println("  Total Permainan: " + gamesPlayed);
+        System.out.println("  Skor Akhir Anda: " + score);
+        System.out.println("====================================");
+        scanner.close();
+    }
+    
+    // [Method-method pendukung sama dengan sebelumnya...]
+    private static void giveHint(String word, char[] guessedLetters) {
+        Random random = new Random();
+        int hintPos;
+        
+        do {
+            hintPos = random.nextInt(word.length());
+        } while (guessedLetters[hintPos] != '_');
+        
+        guessedLetters[hintPos] = word.charAt(hintPos);
+    }
+    
+    private static boolean isWordGuessed(char[] guessedLetters) {
+        for (char c : guessedLetters) {
+            if (c == '_') {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private static String displayGuessedLetters(char[] guessedLetters) {
+        StringBuilder sb = new StringBuilder();
+        for (char c : guessedLetters) {
+            sb.append(c).append(" ");
+        }
+        return sb.toString();
+    }
+    
+    private static void updateGuessedLetters(String word, char[] guessedLetters, char guess) {
+        for (int i = 0; i < word.length(); i++) {
+            if (word.charAt(i) == guess) {
+                guessedLetters[i] = guess;
+            }
+        }
+    }
