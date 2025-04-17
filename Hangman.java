@@ -181,3 +181,34 @@ public class Hangman {
         int streak = 0; // Menyimpan jumlah kemenangan berturut-turut
         int extraLife = 0; // Tambahan nyawa dari streak
         
+        while (playAgain) {
+            if (usedCategories.size() == DATABASE_KATA.length) {
+                usedCategories.clear(); // Reset jika semua kategori sudah digunakan
+            }
+            
+            int categoryIndex;
+            do {
+                categoryIndex = random.nextInt(DATABASE_KATA.length);
+            } while (usedCategories.contains(DATABASE_KATA[categoryIndex][0][2]));
+            
+            usedCategories.add(DATABASE_KATA[categoryIndex][0][2]);
+            int wordIndex = random.nextInt(DATABASE_KATA[categoryIndex].length);
+            
+            String wordToGuess = DATABASE_KATA[categoryIndex][wordIndex][0];
+            String hint = DATABASE_KATA[categoryIndex][wordIndex][1];
+            String category = DATABASE_KATA[categoryIndex][wordIndex][2];
+            
+            char[] guessedLetters = new char[wordToGuess.length()];
+            Arrays.fill(guessedLetters, '_');
+            
+            int remainingTries = MAX_TRIES + extraLife;
+            extraLife = 0; // nyawa tambahan hanya berlaku 1 kali
+            int remainingHints = MAX_HINTS;
+            StringBuilder usedLetters = new StringBuilder();
+            
+            System.out.println("\n=== PERMAINAN KE-" + (++gamesPlayed) + " ===");
+            System.out.println("Kategori: " + category);
+            System.out.println("Petunjuk: " + hint);
+            System.out.println("Panjang kata: " + wordToGuess.length() + " huruf");
+            System.out.println("Kesempatan salah: " + remainingTries);
+            System.out.println("Bantuan tersedia: " + remainingHints);
