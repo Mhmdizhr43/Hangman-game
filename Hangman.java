@@ -212,7 +212,7 @@ public class Hangman {
             System.out.println("Panjang kata: " + wordToGuess.length() + " huruf");
             System.out.println("Kesempatan salah: " + remainingTries);
             System.out.println("Bantuan tersedia: " + remainingHints);
-
+            
             while (remainingTries > 0 && !isWordGuessed(guessedLetters)) {
                 System.out.println("\nKata: " + displayGuessedLetters(guessedLetters));
                 System.out.println("Nyawa: " + "❤".repeat(remainingTries));
@@ -325,7 +325,7 @@ public class Hangman {
             }
         }
     }
-
+    
     private static void drawHangman(int remainingTries) {
         System.out.println("\n  -----");
         System.out.println("  |   |");
