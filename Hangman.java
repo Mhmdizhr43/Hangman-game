@@ -158,3 +158,26 @@ public class Hangman {
             {"YOUTUBE", "Platform video terbesar di dunia", "Aplikasi"}
         }
     };
+
+    private static final int MAX_TRIES = 4;
+    private static final int MAX_HINTS = 2;
+    private static int score = 0;
+    private static List<String> usedCategories = new ArrayList<>();
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+        
+        System.out.println("====================================");
+        System.out.println("|   SUPER HANGMAN TEBAK KATA 100+     |");
+        System.out.println("|   Dengan 15 Kategori Berbeda!    |");
+        System.out.println("====================================");
+        System.out.print("\nMasukkan nama Anda: ");
+        String playerName = scanner.nextLine();
+        int correctStreak = 0;
+
+        boolean playAgain = true;
+        int gamesPlayed = 0;
+        int streak = 0; // Menyimpan jumlah kemenangan berturut-turut
+        int extraLife = 0; // Tambahan nyawa dari streak
+        
